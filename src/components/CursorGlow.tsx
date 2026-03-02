@@ -21,18 +21,20 @@ export default function CursorGlow() {
     }
 
     function animate() {
+      const el = glowRef.current;
+      if (!el) return;
       currentX += (targetX - currentX) * 0.08;
       currentY += (targetY - currentY) * 0.08;
-      glow.style.transform = `translate(${currentX - 300}px, ${currentY - 300}px)`;
+      el.style.transform = `translate(${currentX - 300}px, ${currentY - 300}px)`;
       raf = requestAnimationFrame(animate);
     }
 
     function onEnter() {
-      glow.style.opacity = "1";
+      glowRef.current?.style.setProperty("opacity", "1");
     }
 
     function onLeave() {
-      glow.style.opacity = "0";
+      glowRef.current?.style.setProperty("opacity", "0");
     }
 
     window.addEventListener("mousemove", onMove, { passive: true });
