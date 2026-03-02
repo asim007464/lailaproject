@@ -20,7 +20,7 @@ export default function TypeWriter({
   const [text, setText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const wordIndexRef = useRef(0);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const tick = useCallback(() => {
     const currentWord = words[wordIndexRef.current];
