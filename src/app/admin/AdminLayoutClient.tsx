@@ -11,8 +11,8 @@ export default function AdminLayoutClient({
   const isLogin = pathname === "/admin/login";
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className={isLogin ? "" : "mx-auto max-w-5xl px-4 py-8 sm:px-6"}>
+    <div className={isLogin ? "bg-background" : "min-h-screen bg-background"}>
+      <main className={isLogin ? "pb-8" : "mx-auto max-w-5xl px-4 py-8 sm:px-6"}>
         {children}
       </main>
     </div>
