@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, ArrowRight, Sparkles, LogOut, LayoutDashboard } from "lucide-react";
 import Logo from "./Logo";
 import { createClient } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -17,7 +18,7 @@ const navLinks = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [adminUser, setAdminUser] = useState<{ email: string } | null>(null);
+  const [adminUser, setAdminUser] = useState<User | null>(null);
   const pathname = usePathname();
   const router = useRouter();
 
