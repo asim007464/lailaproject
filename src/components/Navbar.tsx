@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import { Menu, X, ArrowRight, Sparkles } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, X, ArrowRight, Sparkles, LogOut, LayoutDashboard } from "lucide-react";
 import Logo from "./Logo";
+import { createClient } from "@/lib/supabase/client";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -16,7 +17,9 @@ const navLinks = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [adminUser, setAdminUser] = useState<{ email: string } | null>(null);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -27,6 +30,22 @@ export default function Navbar() {
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => setAdminUser(user ?? null));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAdminUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  async function handleLogout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/admin/login");
+    router.refresh();
+  }
 
   return (
     <>
@@ -54,14 +73,14 @@ export default function Navbar() {
               <Link
                 href="/"
                 className="flex items-center gap-2 sm:gap-2.5 group shrink-0"
+                aria-label="NWstudios home"
               >
                 <div className="relative transition-transform duration-300 group-hover:scale-105">
                   <Logo size={32} />
                   <div className="absolute inset-0 rounded-xl bg-primary-500/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
-                <span className="text-base sm:text-lg font-bold tracking-tight">
-                  <span className="text-foreground">Laila</span>
-                  <span className="text-muted/60">Web</span>
+                <span className="text-base sm:text-lg font-bold tracking-tight text-foreground">
+                  NWstudios
                 </span>
               </Link>
 
@@ -90,7 +109,32 @@ export default function Navbar() {
                 })}
               </div>
 
-              <div className="hidden md:flex items-center">
+              <div className="hidden md:flex items-center gap-2">
+                {adminUser && (
+                  <>
+                    <Link
+                      href="/admin"
+                      className={`relative px-4 py-1.5 text-[13px] font-medium rounded-lg transition-all duration-300 ${
+                        pathname.startsWith("/admin")
+                          ? "text-foreground bg-primary-500/15"
+                          : "text-muted/70 hover:text-foreground hover:bg-white/[0.04]"
+                      }`}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <LayoutDashboard size={14} />
+                        Admin
+                      </span>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-[13px] font-medium text-muted hover:text-foreground hover:bg-white/10 transition-colors"
+                    >
+                      <LogOut size={14} />
+                      Log out
+                    </button>
+                  </>
+                )}
                 <Link
                   href="/contact#form"
                   className="group relative flex items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-5 py-2 text-[13px] font-semibold text-white shadow-[0_0_20px_rgba(79,70,229,0.25)] hover:shadow-[0_0_30px_rgba(79,70,229,0.4)] transition-all duration-300"
@@ -133,10 +177,10 @@ export default function Navbar() {
         }`}
       >
         <div className="flex items-center justify-between p-5 border-b border-white/[0.06]">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" aria-label="NWstudios">
             <Logo size={24} />
             <span className="text-sm font-semibold text-foreground">
-              LailaWeb
+              NWstudios
             </span>
           </div>
           <button
@@ -171,6 +215,33 @@ export default function Navbar() {
               </Link>
             );
           })}
+          {adminUser && (
+            <>
+              <Link
+                href="/admin"
+                onClick={() => setMobileOpen(false)}
+                className={`flex items-center gap-3 text-sm font-medium py-3 px-4 rounded-xl ${
+                  pathname.startsWith("/admin")
+                    ? "text-foreground bg-primary-500/10 border border-primary-500/15"
+                    : "text-muted hover:text-foreground hover:bg-white/[0.03]"
+                }`}
+              >
+                <LayoutDashboard size={16} />
+                Admin
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  handleLogout();
+                }}
+                className="flex items-center gap-3 text-sm font-medium py-3 px-4 rounded-xl text-muted hover:text-foreground hover:bg-white/[0.03] w-full"
+              >
+                <LogOut size={16} />
+                Log out
+              </button>
+            </>
+          )}
           <Link
             href="/contact#form"
             onClick={() => setMobileOpen(false)}

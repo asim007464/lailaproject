@@ -76,7 +76,7 @@ const testimonials = [
   {
     name: "James Whitfield",
     role: "Director, Whitfield & Co.",
-    text: "Laila Web completely transformed our online presence. The new website is sleek, fast, and our enquiries have increased by 40% since launch.",
+    text: "NWstudios completely transformed our online presence. The new website is sleek, fast, and our enquiries have increased by 40% since launch.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
   },

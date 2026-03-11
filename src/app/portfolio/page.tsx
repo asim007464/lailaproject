@@ -2,59 +2,64 @@ import Link from "next/link";
 import Image from "next/image";
 import SectionHeading from "@/components/SectionHeading";
 import AnimateOnScroll from "@/components/AnimateOnScroll";
-import TiltCard from "@/components/TiltCard";
 import MouseGlow from "@/components/MouseGlow";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Portfolio | Laila Web Solutions",
+  title: "Portfolio | NWstudios",
   description:
     "Explore our portfolio of completed web development projects for UK businesses.",
 };
 
 const projects = [
   {
-    title: "Whitfield & Co. Law Firm",
-    category: "Corporate Website",
-    desc: "A modern, authoritative website for a London-based law firm. Features a clean design, practice area pages, team profiles, and an integrated client portal.",
+    title: "Excellence Riviera",
+    category: "Luxury Travel & Hospitality",
+    desc: "Luxury holidays on the French Riviera — villas, yacht charters, hotels and concierge services across Saint-Tropez, Cannes and Monaco. Curated accommodation, transport and experiences.",
     tags: ["Next.js", "TypeScript", "Tailwind CSS"],
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=500&fit=crop",
+    image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=500&fit=crop",
+    url: "https://excellenceriviera.com/",
   },
   {
-    title: "Bloom Boutique",
-    category: "E-commerce",
-    desc: "A beautiful online shop for a premium flower delivery service. Includes real-time inventory, subscription bouquets, and a seamless checkout experience.",
-    tags: ["Shopify", "Custom Theme", "Liquid"],
-    image: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=800&h=500&fit=crop",
-  },
-  {
-    title: "TechBridge Solutions",
-    category: "SaaS Website",
-    desc: "A conversion-focused marketing website for a B2B SaaS company. Features animated demos, pricing tables, and HubSpot integration for lead capture.",
+    title: "Elite Alps",
+    category: "Luxury Ski & Travel",
+    desc: "Luxury ski holidays in Courchevel and the French Alps. Handpicked chalets, apartments and hotels plus helicopter, jet and car transfers and tailored alpine experiences.",
     tags: ["React", "Framer Motion", "Headless CMS"],
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop",
+    image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=500&fit=crop",
+    url: "https://elitealps.com/",
   },
   {
-    title: "The Green Kitchen",
-    category: "Restaurant Website",
-    desc: "An appetising website for a plant-based restaurant in Manchester. Includes an online menu, table reservations, and integration with delivery platforms.",
-    tags: ["WordPress", "Custom Theme", "PHP"],
-    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=500&fit=crop",
+    title: "Courchevel Media",
+    category: "Media & Photography",
+    desc: "Luxury ski photography and videography in Courchevel. Cinematic capture of your ski holiday with drone shots, discreet service and high-end edits.",
+    tags: ["Next.js", "Tailwind CSS", "Video"],
+    image: "https://images.unsplash.com/photo-1605540436563-5bca919ae766?w=800&h=500&fit=crop",
+    url: "https://courchevelmedia.com/",
   },
   {
-    title: "Peak Fitness Studio",
-    category: "Fitness & Wellness",
-    desc: "A dynamic website for a boutique fitness studio with class bookings, membership management, trainer profiles, and video-on-demand integration.",
-    tags: ["Next.js", "Stripe", "Prisma"],
-    image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=500&fit=crop",
+    title: "VideoSpark AI",
+    category: "SaaS / AI",
+    desc: "AI-powered video generator for TikTok, YouTube Shorts and Reels. Create engaging short-form video content with intelligent automation and templates.",
+    tags: ["React", "AI", "Video"],
+    image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&h=500&fit=crop",
+    url: "https://videospark.site/",
   },
   {
-    title: "Evergreen Properties",
-    category: "Real Estate",
-    desc: "A property listing platform with advanced search filters, interactive maps, virtual tours, and an agent dashboard for managing listings.",
-    tags: ["React", "Node.js", "PostgreSQL"],
-    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=500&fit=crop",
+    title: "ShineSpan",
+    category: "Cleaning Website",
+    desc: "A UK-based cleaning services website. Professional, trustworthy presence for local cleaning — domestic, commercial and specialist cleaning with clear pricing and easy booking.",
+    tags: ["React", "Netlify", "UK Business"],
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=500&fit=crop",
+    url: "https://shinespanproject.netlify.app/",
+  },
+  {
+    title: "Meta Brains",
+    category: "E-Learning Platform",
+    desc: "Coding and GenAI learning platform — from Python and data science to no-code trading bots and AI. Courses designed to accelerate careers and skills.",
+    tags: ["E-Learning", "React", "API"],
+    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=500&fit=crop",
+    url: "https://www.metabrains.org/",
   },
 ];
 
@@ -175,50 +180,65 @@ export default function PortfolioPage() {
       <MouseGlow className="py-16 sm:py-24 md:py-32 relative">
         <div className="absolute top-1/3 right-0 w-56 sm:w-80 h-56 sm:h-80 bg-accent-500/5 rounded-full blur-3xl animate-drift-3" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {projects.map((project, i) => (
-              <AnimateOnScroll key={project.title} animation="fade-up" delay={i * 100}>
-                <TiltCard className="rounded-2xl h-full">
-                  <div className="group border border-white/[0.06] bg-white/[0.02] rounded-2xl overflow-hidden h-full flex flex-col">
-                    <div className="h-48 relative overflow-hidden">
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-700"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500" />
+              <AnimateOnScroll
+                key={project.title}
+                animation="fade-up"
+                delay={i * 80}
+              >
+                <Link
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block h-full rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden transition-all duration-300 hover:border-primary-500/20 hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.35)]"
+                >
+                  <div className="relative h-52 sm:h-56 overflow-hidden">
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent opacity-90" />
+                    <div className="absolute inset-0 bg-black/15 transition-opacity duration-300 group-hover:opacity-0" />
+                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-primary-400">
+                        <span className="h-1 w-1 rounded-full bg-primary-400" />
+                        {project.category}
+                      </span>
+                      <h3 className="mt-1.5 text-lg font-bold text-foreground drop-shadow-sm">
+                        {project.title}
+                      </h3>
                     </div>
-                    <div className="p-6 flex flex-col flex-1">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-primary-400">
-                      {project.category}
-                    </span>
-                    <h3 className="mt-2 text-lg font-bold text-foreground">
-                      {project.title}
-                    </h3>
-                    <p className="mt-2 text-sm text-muted leading-relaxed flex-1">
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-black/20">
+                      <span className="rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-background shadow-lg flex items-center gap-2">
+                        View Project
+                        <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-4 sm:p-5 flex flex-col flex-1">
+                    <p className="text-sm text-muted leading-relaxed line-clamp-2">
                       {project.desc}
                     </p>
-                    <div className="mt-4 flex flex-wrap gap-2">
+                    <div className="mt-3 flex flex-wrap gap-2">
                       {project.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="rounded-full bg-primary-500/10 border border-primary-500/20 px-3 py-1 text-xs font-medium text-primary-400"
+                          className="rounded-lg bg-gradient-to-r from-primary-500/15 to-primary-500/5 border border-primary-500/20 px-2.5 py-1 text-xs font-medium text-primary-300"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <div className="mt-4 pt-4 border-t border-white/[0.06]">
-                      <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-400 group-hover:text-primary-300 transition-colors">
-                        View Project
-                        <ExternalLink size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                      </span>
+                    <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center gap-2 text-sm font-semibold text-primary-400 group-hover:text-primary-300 transition-colors">
+                      <span>View case study</span>
+                      <ExternalLink size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </div>
                   </div>
-                  </div>
-                </TiltCard>
+                </Link>
               </AnimateOnScroll>
             ))}
           </div>

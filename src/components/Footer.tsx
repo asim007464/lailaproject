@@ -28,9 +28,8 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2.5 mb-5">
               <Logo size={32} />
-              <span className="text-lg font-bold tracking-tight">
-                <span className="text-foreground">Laila</span>
-                <span className="text-muted">Web</span>
+              <span className="text-lg font-bold tracking-tight text-foreground">
+                NWstudios
               </span>
             </div>
             <p className="text-muted text-sm leading-relaxed">
@@ -94,7 +93,7 @@ export default function Footer() {
 
         <div className="mt-10 sm:mt-14 pt-6 sm:pt-8 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted/60">
-            &copy; {new Date().getFullYear()} Laila Web Solutions. All rights
+            &copy; {new Date().getFullYear()} NWstudios. All rights
             reserved.
           </p>
           <div className="flex gap-6">

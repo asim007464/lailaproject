@@ -18,7 +18,7 @@ import {
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Services | Laila Web Solutions",
+  title: "Services | NWstudios",
   description:
     "Explore our web development, redesign, maintenance, and design services tailored for UK businesses.",
 };

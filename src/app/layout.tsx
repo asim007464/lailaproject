@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Laila Web Solutions | Professional Web Development & Design in the UK",
+  title: "NWstudios | Professional Web Development & Design in the UK",
   description:
     "Expert web development, redesign, and maintenance services for UK businesses. We build stunning, high-performance websites tailored to your brand.",
 };

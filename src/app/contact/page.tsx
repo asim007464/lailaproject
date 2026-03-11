@@ -10,6 +10,7 @@ import {
   Clock,
   Send,
   CheckCircle2,
+  Loader2,
 } from "lucide-react";
 
 const contactInfo = [
@@ -56,13 +57,48 @@ const projectTypes = [
 ];
 
 import BudgetRangeSlider from "@/components/BudgetRangeSlider";
+import ProjectTypeSelect from "@/components/ProjectTypeSelect";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitted(true);
+    setError(null);
+    setSubmitting(true);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const payload = {
+      full_name: formData.get("full_name"),
+      email: formData.get("email"),
+      phone: formData.get("phone") || undefined,
+      company_name: formData.get("company_name") || undefined,
+      project_type: formData.get("project_type"),
+      budget_min: formData.get("budget_min") ? Number(formData.get("budget_min")) : undefined,
+      budget_max: formData.get("budget_max") ? Number(formData.get("budget_max")) : undefined,
+      website_url: formData.get("website_url") || undefined,
+      message: formData.get("message"),
+    };
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data.error || "Something went wrong. Please try again.");
+        return;
+      }
+      setSubmitted(true);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   const inputClasses =
@@ -70,35 +106,8 @@ export default function ContactPage() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden py-16 sm:py-24 md:py-32">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-20 right-1/4 w-56 sm:w-80 h-56 sm:h-80 bg-primary-600/15 rounded-full blur-3xl animate-drift-1" />
-          <div className="absolute bottom-20 left-1/3 w-48 sm:w-72 h-48 sm:h-72 bg-accent-500/10 rounded-full blur-3xl animate-drift-2" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(79,70,229,0.08),transparent_50%)]" />
-        </div>
-
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <span className="animate-fade-in-down inline-flex items-center gap-2 rounded-full bg-primary-500/10 border border-primary-500/20 px-4 py-1.5 text-xs font-semibold text-primary-400 mb-6">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary-400 animate-pulse" />
-              Contact Us
-            </span>
-            <h1 className="animate-fade-in-up text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1]">
-              Tell Us About{" "}
-              <span className="gradient-text">Your Project</span>
-            </h1>
-            <p className="animate-fade-in-up delay-200 mt-6 text-lg text-muted leading-relaxed">
-              Whether you need a new website, a redesign, or help resolving
-              errors — fill out the form below and we&apos;ll get back to you
-              with a free, no-obligation quote within 24 hours.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Form */}
-      <section id="form" className="py-16 sm:py-24 md:py-32 relative scroll-mt-24">
+      {/* Describe Your Project form — right after navbar */}
+      <section id="form" className="pt-8 sm:pt-12 pb-16 sm:pb-24 md:pb-32 relative scroll-mt-24">
         <div className="absolute top-1/4 right-0 w-56 sm:w-80 h-56 sm:h-80 bg-primary-600/5 rounded-full blur-3xl animate-drift-3" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
           <div className="grid lg:grid-cols-5 gap-10 lg:gap-16">
@@ -122,18 +131,24 @@ export default function ContactPage() {
                     </h3>
                     <p className="mt-2 text-muted">
                       We&apos;ve received your project details. Our team will
-                      review your requirements and get back to you within 24
-                      hours.
+                      review your requirements and get back to you via email
+                      within 24 hours.
                     </p>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
+                    {error && (
+                      <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
+                        {error}
+                      </p>
+                    )}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div>
                         <label className="block text-sm font-medium text-foreground mb-2">
                           Full Name <span className="text-amber-400">*</span>
                         </label>
                         <input
+                          name="full_name"
                           type="text"
                           required
                           placeholder="John Smith"
@@ -146,6 +161,7 @@ export default function ContactPage() {
                           <span className="text-amber-400">*</span>
                         </label>
                         <input
+                          name="email"
                           type="email"
                           required
                           placeholder="john@example.co.uk"
@@ -160,6 +176,7 @@ export default function ContactPage() {
                           Phone Number
                         </label>
                         <input
+                          name="phone"
                           type="tel"
                           placeholder="+44 7XXX XXX XXX"
                           className={inputClasses}
@@ -170,6 +187,7 @@ export default function ContactPage() {
                           Company Name
                         </label>
                         <input
+                          name="company_name"
                           type="text"
                           placeholder="Your Company Ltd."
                           className={inputClasses}
@@ -181,20 +199,11 @@ export default function ContactPage() {
                       <label className="block text-sm font-medium text-foreground mb-2">
                         Project Type <span className="text-amber-400">*</span>
                       </label>
-                      <select
+                      <ProjectTypeSelect
+                        options={projectTypes}
+                        placeholder="Select a project type"
                         required
-                        defaultValue=""
-                        className={inputClasses}
-                      >
-                        <option value="" disabled>
-                          Select a project type
-                        </option>
-                        {projectTypes.map((type) => (
-                          <option key={type} value={type}>
-                            {type}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     </div>
 
                     <BudgetRangeSlider />
@@ -204,6 +213,7 @@ export default function ContactPage() {
                         Existing Website URL
                       </label>
                       <input
+                        name="website_url"
                         type="url"
                         placeholder="https://www.yourwebsite.co.uk"
                         className={inputClasses}
@@ -216,6 +226,7 @@ export default function ContactPage() {
                         <span className="text-amber-400">*</span>
                       </label>
                       <textarea
+                        name="message"
                         required
                         rows={6}
                         placeholder="Tell us about your project — what do you need? What problems are you facing? What are your goals? The more detail, the better we can help."
@@ -225,13 +236,23 @@ export default function ContactPage() {
 
                     <button
                       type="submit"
-                      className="group inline-flex items-center gap-2 rounded-full bg-foreground text-background px-8 py-4 text-sm font-semibold shadow-xl hover:scale-105 transition-all duration-300"
+                      disabled={submitting}
+                      className="group inline-flex items-center justify-center gap-2 rounded-full bg-foreground text-background px-8 py-4 text-sm font-semibold shadow-xl hover:scale-105 transition-all duration-300 disabled:opacity-70 disabled:pointer-events-none"
                     >
-                      Send Your Request
-                      <Send
-                        size={16}
-                        className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
-                      />
+                      {submitting ? (
+                        <>
+                          <Loader2 size={18} className="loader-spin shrink-0" />
+                          Sending…
+                        </>
+                      ) : (
+                        <>
+                          Send Your Request
+                          <Send
+                            size={16}
+                            className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                          />
+                        </>
+                      )}
                     </button>
                   </form>
                 )}

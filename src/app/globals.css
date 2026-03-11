@@ -136,6 +136,11 @@ html {
   100% { background-position: 200% 0; }
 }
 
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 @keyframes spin-slow {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -179,6 +184,9 @@ html {
 .animate-gradient { background-size: 200% 200%; animation: gradient-shift 4s ease infinite; }
 .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
 .animate-shimmer { background-size: 200% 100%; animation: shimmer 3s linear infinite; }
+.animate-spin,
+.loader-spin { animation: spin 1s linear infinite; }
+.loader-spin { display: inline-block; }
 .animate-spin-slow { animation: spin-slow 20s linear infinite; }
 .animate-border-dance { animation: border-dance 4s ease-in-out infinite; }
 .animate-blob { animation: blob 7s ease-in-out infinite; }
@@ -334,6 +342,12 @@ html {
     transition-duration: 0.01ms !important;
   }
 
+  /* Keep loader spinning for loading feedback */
+  .loader-spin {
+    animation-duration: 1s !important;
+    animation-iteration-count: infinite !important;
+  }
+
   .scroll-animate,
   .scroll-animate-left,
   .scroll-animate-right,
@@ -372,4 +386,41 @@ html, body {
     min-height: 44px;
     min-width: 44px;
   }
+}
+
+/* Budget range slider thumbs (avoids styled-jsx hydration issues) */
+.budget-slider-thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #fafafa;
+  border: 3px solid #09090b;
+  box-shadow: 0 0 8px rgba(79, 70, 229, 0.3);
+  cursor: pointer;
+  pointer-events: all;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.budget-slider-thumb::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 14px rgba(79, 70, 229, 0.5);
+  transform: scale(1.1);
+}
+.budget-slider-thumb::-webkit-slider-thumb:active {
+  box-shadow: 0 0 18px rgba(79, 70, 229, 0.6);
+  transform: scale(1.15);
+}
+.budget-slider-thumb::-moz-range-thumb {
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  background: #fafafa;
+  border: 3px solid #09090b;
+  box-shadow: 0 0 8px rgba(79, 70, 229, 0.3);
+  cursor: pointer;
+  pointer-events: all;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.budget-slider-thumb::-moz-range-thumb:hover {
+  box-shadow: 0 0 14px rgba(79, 70, 229, 0.5);
 }

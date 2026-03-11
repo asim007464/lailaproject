@@ -16,9 +16,9 @@ import {
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About | Laila Web Solutions",
+  title: "About | NWstudios",
   description:
-    "Learn about Laila Web Solutions — a UK-based web development and design agency dedicated to helping businesses thrive online.",
+    "Learn about NWstudios — a UK-based web development and design agency dedicated to helping businesses thrive online.",
 };
 
 const values = [
