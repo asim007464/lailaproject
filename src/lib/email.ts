@@ -33,6 +33,46 @@ function getGmailTransporter() {
   });
 }
 
+/** Check email configuration (for diagnostics). Does not expose secrets. */
+export function getEmailConfigStatus(): {
+  senderConfigured: boolean;
+  method: "gmail" | "resend" | "none";
+  adminEmailSet: boolean;
+  hint?: string;
+} {
+  const hasGmail = !!(process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD);
+  const hasResend = !!process.env.RESEND_API_KEY;
+  const adminSet = !!process.env.ADMIN_EMAIL;
+
+  if (hasGmail) {
+    return {
+      senderConfigured: true,
+      method: "gmail",
+      adminEmailSet: adminSet,
+      hint: !adminSet ? "Set ADMIN_EMAIL in Vercel to receive notifications." : undefined,
+    };
+  }
+  if (hasResend) {
+    const usingOnboarding = !process.env.EMAIL_FROM || process.env.EMAIL_FROM.includes("onboarding@resend.dev");
+    return {
+      senderConfigured: true,
+      method: "resend",
+      adminEmailSet: adminSet,
+      hint: usingOnboarding
+        ? "Using onboarding@resend.dev: Resend only allows sending TO your Resend signup email. Verify your domain in Resend to send to any address."
+        : !adminSet
+          ? "Set ADMIN_EMAIL in Vercel to receive notifications."
+          : undefined,
+    };
+  }
+  return {
+    senderConfigured: false,
+    method: "none",
+    adminEmailSet: adminSet,
+    hint: "Set GMAIL_USER + GMAIL_APP_PASSWORD, or RESEND_API_KEY in Vercel env vars. Redeploy after adding.",
+  };
+}
+
 /** Which sender to use: Gmail (Nodemailer) takes precedence over Resend if both are set */
 function getFromAddress(): string {
   if (process.env.GMAIL_USER) {
@@ -73,9 +113,11 @@ async function sendMail(options: SendMailOptions): Promise<void> {
     return;
   }
 
-  console.warn(
-    "[Email] No sender configured. Set either GMAIL_USER + GMAIL_APP_PASSWORD or RESEND_API_KEY in .env.local"
+  const err = new Error(
+    "[Email] No sender configured. Set GMAIL_USER + GMAIL_APP_PASSWORD, or RESEND_API_KEY in Vercel env vars."
   );
+  console.error(err.message);
+  throw err;
 }
 
 /** Notify admin when a new contact form is submitted */

@@ -134,14 +134,36 @@ If you get the admin email in your Gmail, the setup is working. You never need t
 
 ---
 
-## 5. Quick checklist
+## 5. Deploying to Vercel (emails not working?)
 
-- [ ] Supabase project created, URL + anon + service_role keys in `.env.local`
+If submissions show in the admin panel but **no emails are sent**:
+
+1. **Add env vars in Vercel:** Project → **Settings** → **Environment Variables**. Add the same variables as `.env.local` (Supabase, email, `ADMIN_EMAIL`, `NEXT_PUBLIC_APP_URL`). Apply to **Production** (and Preview if needed).
+
+2. **Redeploy** after adding env vars — Vercel only picks them up on the next build.
+
+3. **Check email config:** After deploy, open `https://your-site.vercel.app/api/health/email`. It returns:
+   - `senderConfigured`: true/false
+   - `method`: "gmail" | "resend" | "none"
+   - `adminEmailSet`: true/false
+   - `hint`: troubleshooting tip if something is wrong
+
+4. **Resend with `onboarding@resend.dev`:** Resend’s free test sender only allows sending **to** the email you signed up with. To send to customers and any admin email, you must **verify your domain** in Resend and set `EMAIL_FROM=NWstudios <hello@yourdomain.com>`.
+
+5. **Gmail:** Use a **Gmail App Password** (not your normal password). Enable 2-Step Verification first, then create an App Password at [Google Account → Security → App passwords](https://myaccount.google.com/apppasswords).
+
+6. **Check Vercel logs:** Deployments → select your deployment → **Functions** → click a function log. Look for `[Email]` messages to see send failures.
+
+---
+
+## 6. Quick checklist
+
+- [ ] Supabase project created, URL + anon + service_role keys in `.env.local` (and Vercel)
 - [ ] `supabase/schema.sql` run in Supabase SQL Editor
 - [ ] One admin user created in Supabase **Authentication → Users**
-- [ ] Resend account + API key in `.env.local`
-- [ ] `ADMIN_EMAIL` and `NEXT_PUBLIC_APP_URL` set in `.env.local`
-- [ ] (Recommended) Domain added and verified in Resend; `EMAIL_FROM` set to that domain
-- [ ] Restart dev server after changing `.env.local` (`npm run dev`)
+- [ ] Resend account + API key (or Gmail App Password) in `.env.local` and Vercel
+- [ ] `ADMIN_EMAIL` and `NEXT_PUBLIC_APP_URL` set (use your real URL on Vercel, e.g. `https://yoursite.vercel.app`)
+- [ ] (Recommended) Domain verified in Resend; `EMAIL_FROM` set to that domain
+- [ ] Restart dev server after changing `.env.local` (`npm run dev`); redeploy on Vercel after adding env vars
 
-After that, submit the contact form once and check: (1) you get the admin notification email, (2) the customer gets the confirmation + thread link, (3) you can log in at `/admin/login` and reply, (4) the customer gets your reply by email and can see it (and reply again) on the thread page.
+After that, submit the contact form once and check: (1) you get the admin notification email, (2) the customer gets the confirmation, (3) you can log in at `/admin/login` and reply, (4) the customer gets your reply by email.
